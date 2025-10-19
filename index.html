@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aushadham</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .section-fade {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .section-hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            position: absolute;
+            width: 100%;
+        }
+        .section-visible {
+            opacity: 1;
+            transform: translateY(0);
+            position: relative;
+        }
+        .card-hover {
+            transition: all 0.2s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 min-h-screen p-4">
+
+<div class="max-w-2xl mx-auto">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <button id="back-btn" class="w-12 h-12 rounded-xl bg-white shadow-md flex items-center justify-center hover:shadow-lg transition hidden">
+            <svg class="w-6 h-6 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+            </svg>
+        </button>
+        <button id="home-btn" class="w-12 h-12 rounded-xl bg-white shadow-md flex items-center justify-center hover:shadow-lg transition hidden">
+            <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+        </button>
+        <button id="profile-btn" class="w-12 h-12 rounded-xl bg-white shadow-md flex items-center justify-center hover:shadow-lg transition hidden">
+            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+        </button>
+    </div>
+
+    <div id="container-content" class="relative min-h-[600px]">
+
+        <!-- Start Section -->
+        <div id="start-section" class="section-fade section-visible">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold mb-3 text-gray-900">Aushadham</h1>
+                <p class="text-gray-600 text-lg">AI-Powered Health Assessment</p>
+            </div>
+            
+            <div class="bg-white rounded-2xl p-6 mb-6 shadow-md">
+                <label class="block text-sm font-semibold mb-2 text-gray-700">Main Symptom</label>
+                <input type="text" id="symptom-input" placeholder="e.g., Headache, Fever, Stomach pain" 
+                    class="w-full p-4 bg-gray-50 text-gray-900 rounded-xl border-2 border-gray-200 focus:border-cyan-500 focus:outline-none transition text-lg" />
+            </div>
+
+            <div class="bg-white rounded-2xl p-6 mb-6 shadow-md">
+                <label class="block text-sm font-semibold mb-2 text-gray-700">Description (Optional)</label>
+                <textarea id="description-input" placeholder="Briefly describe how you feel..." rows="4" 
+                    class="w-full p-4 bg-gray-50 text-gray-900 rounded-xl border-2 border-gray-200 focus:border-cyan-500 focus:outline-none transition no-scrollbar resize-none"></textarea>
+            </div>
+
+            <button id="start-btn" class="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-5 px-6 rounded-2xl transition duration-300 ease-in-out transform hover:scale-[1.02] text-lg shadow-lg shadow-green-500/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100 flex items-center justify-center">
+                <span class="btn-text">Start Assessment</span>
+                <svg class="loader-spinner animate-spin ml-3 h-6 w-6 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Question Section -->
+        <div id="question-section" class="section-fade section-hidden">
+            <div class="mb-6">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm text-green-400 font-semibold" id="progress-text">0/10 questions answered</span>
+                    <button id="evaluate-btn" class="px-6 py-2 bg-cyan-500 hover:bg-cyan-600 text-black font-bold rounded-xl transition">
+                        Evaluate
+                    </button>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-3">
+                    <div id="progress-bar-fill" class="bg-gradient-to-r from-green-400 to-cyan-400 h-3 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div id="question-card" class="bg-white rounded-2xl p-8 border-2 border-yellow-400 shadow-lg">
+                <div class="mb-4">
+                    <span class="text-sm text-gray-700 font-semibold" id="category-label">Category</span>
+                    <span class="text-xs text-gray-500 ml-2" id="skip-label"></span>
+                </div>
+                
+                <div class="mb-6 text-gray-600 text-sm" id="helper-text"></div>
+                
+                <h2 id="question-text" class="text-2xl font-bold mb-8 text-center min-h-[60px] text-gray-900"></h2>
+                
+                <div id="options-container" class="space-y-4"></div>
+                
+                <div class="flex gap-3 mt-6">
+                    <button id="back-question-btn" class="flex-1 bg-white hover:bg-gray-50 text-gray-900 font-semibold py-4 px-6 rounded-xl transition flex items-center justify-center border-2 border-red-400 shadow-md">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12"/>
+                        </svg>
+                        Back
+                    </button>
+                    <button id="skip-question-btn" class="flex-1 bg-white hover:bg-gray-50 text-gray-900 font-semibold py-4 px-6 rounded-xl transition flex items-center justify-center border-2 border-green-400 shadow-md">
+                        Skip
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Section -->
+        <div id="report-section" class="section-fade section-hidden">
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-12 h-12 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <h2 class="text-3xl font-bold mb-2 text-gray-900">Assessment Complete</h2>
+                <p class="text-gray-600">Here's your health report</p>
+            </div>
+            
+            <div id="report-content" class="space-y-4"></div>
+            
+            <button id="restart-btn" class="mt-8 w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-bold py-5 px-6 rounded-2xl transition duration-300 text-lg shadow-lg shadow-cyan-500/20">
+                Start New Assessment
+            </button>
+        </div>
+
+        <!-- Error Banner -->
+        <div id="error-banner" class="hidden bg-red-50 border-2 border-red-400 text-red-800 px-6 py-4 rounded-xl mb-4" role="alert">
+            <strong class="font-bold">Error: </strong>
+            <span class="block sm:inline" id="error-message">Something went wrong.</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- DOM Elements ---
+    const startBtn = document.getElementById('start-btn');
+    const restartBtn = document.getElementById('restart-btn');
+    const evaluateBtn = document.getElementById('evaluate-btn');
+    const backBtn = document.getElementById('back-btn');
+    const homeBtn = document.getElementById('home-btn');
+    const profileBtn = document.getElementById('profile-btn');
+    const backQuestionBtn = document.getElementById('back-question-btn');
+    const skipQuestionBtn = document.getElementById('skip-question-btn');
+    const symptomInput = document.getElementById('symptom-input');
+    const descriptionInput = document.getElementById('description-input');
+    
+    const startSection = document.getElementById('start-section');
+    const questionSection = document.getElementById('question-section');
+    const reportSection = document.getElementById('report-section');
+    
+    const questionText = document.getElementById('question-text');
+    const categoryLabel = document.getElementById('category-label');
+    const skipLabel = document.getElementById('skip-label');
+    const helperText = document.getElementById('helper-text');
+    const optionsContainer = document.getElementById('options-container');
+    const progressBarFill = document.getElementById('progress-bar-fill');
+    const progressText = document.getElementById('progress-text');
+    const reportContent = document.getElementById('report-content');
+    
+    const errorBanner = document.getElementById('error-banner');
+    const errorMessage = document.getElementById('error-message');
+
+    // --- State ---
+    let sessionId = null;
+    let currentQuestion = null;
+    const API_BASE_URL = 'https://aushadham.onrender.com';
+
+    // --- UI Control Functions ---
+    const showSection = (sectionToShow) => {
+        [startSection, questionSection, reportSection].forEach(section => {
+            if (section.id === sectionToShow) {
+                section.classList.remove('section-hidden');
+                section.classList.add('section-visible');
+            } else {
+                section.classList.add('section-hidden');
+                section.classList.remove('section-visible');
+            }
+        });
+
+        // Show/hide navigation buttons
+        const showNav = sectionToShow !== 'start-section';
+        [backBtn, homeBtn, profileBtn].forEach(btn => {
+            btn.classList.toggle('hidden', !showNav);
+        });
+    };
+
+    const setLoading = (button, isLoading) => {
+        const btnText = button.querySelector('.btn-text');
+        const spinner = button.querySelector('.loader-spinner');
+        button.disabled = isLoading;
+        if (isLoading) {
+            btnText.textContent = 'Processing...';
+            spinner.classList.remove('hidden');
+        } else {
+            btnText.textContent = 'Start Assessment';
+            spinner.classList.add('hidden');
+        }
+    };
+
+    const showError = (message) => {
+        errorMessage.textContent = message || 'An unexpected error occurred.';
+        errorBanner.classList.remove('hidden');
+        setTimeout(() => {
+            errorBanner.classList.add('hidden');
+        }, 5000);
+    };
+
+    // --- API Call Wrapper ---
+    const apiCall = async (endpoint, body) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            const data = await response.json();
+            if (!data.success) {
+                throw new Error(data.error || 'API request failed');
+            }
+            return data;
+        } catch (error) {
+            console.error(`API Error on ${endpoint}:`, error);
+            showError(error.message);
+            return null;
+        }
+    };
+
+    // --- Core Application Logic ---
+    const startQuestionnaire = async () => {
+        const symptom = symptomInput.value.trim();
+        const description = descriptionInput.value.trim();
+        if (!symptom) {
+            showError('Please enter your main symptom to begin.');
+            return;
+        }
+
+        setLoading(startBtn, true);
+        const data = await apiCall('start_questionnaire', { symptom, description });
+        setLoading(startBtn, false);
+
+        if (data) {
+            sessionId = data.session_id;
+            showSection('question-section');
+            displayQuestion(data.question);
+        }
+    };
+
+    const submitAnswer = async (answer, action = 'next') => {
+        if (!sessionId) return;
+        
+        const buttons = optionsContainer.querySelectorAll('button');
+        buttons.forEach(btn => btn.disabled = true);
+        
+        const data = await apiCall('submit_answer', { session_id: sessionId, answer, action });
+        
+        if (data) {
+            if (data.completed) {
+                showReport();
+            } else {
+                displayQuestion(data.question);
+            }
+        } else {
+            buttons.forEach(btn => btn.disabled = false);
+        }
+    };
+
+    const displayQuestion = (question) => {
+        currentQuestion = question;
+        
+        categoryLabel.textContent = question.category || 'Assessment';
+        skipLabel.textContent = question.skipped ? '(skipped)' : '';
+        skipLabel.className = question.skipped ? 'text-xs text-gray-500 ml-2' : 'text-xs text-gray-500 ml-2 hidden';
+        
+        helperText.textContent = question.helper_text || '';
+        questionText.textContent = question.question;
+        optionsContainer.innerHTML = '';
+
+        question.options.forEach((opt, idx) => {
+            const colors = ['yellow', 'green', 'red', 'cyan'];
+            const color = colors[idx % colors.length];
+            
+            const btn = document.createElement('button');
+            btn.textContent = opt;
+            btn.className = `w-full bg-white hover:bg-${color}-50 hover:border-${color}-500 text-gray-900 font-semibold py-5 px-6 rounded-xl transition duration-200 border-2 border-${color}-400 card-hover text-lg shadow-md`;
+            btn.onclick = () => submitAnswer(opt, 'next');
+            optionsContainer.appendChild(btn);
+        });
+
+        const totalQuestions = 10;
+        const answered = Math.round((question.progress / 100) * totalQuestions);
+        progressText.textContent = `${answered}/${totalQuestions} questions answered`;
+        progressBarFill.style.width = `${question.progress}%`;
+    };
+
+    const showReport = async () => {
+        const data = await apiCall('get_report', { session_id: sessionId });
+
+        if (data) {
+            showSection('report-section');
+            const { report } = data;
+            
+            let html = `
+                <div class="bg-white rounded-2xl p-6 border-l-4 border-cyan-500 shadow-md">
+                    <h3 class="font-bold text-lg mb-2 text-cyan-600">Symptom Summary</h3>
+                    <p class="text-gray-700">${report.symptom}</p>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-white rounded-2xl p-6 text-center shadow-md">
+                        <div class="text-3xl font-bold text-blue-600 mb-2">${report.severity}</div>
+                        <h3 class="text-sm font-semibold text-gray-600">Severity Level</h3>
+                    </div>
+                    <div class="bg-white rounded-2xl p-6 text-center shadow-md">
+                        <div class="text-3xl font-bold text-amber-600 mb-2">${report.urgency}</div>
+                        <h3 class="text-sm font-semibold text-gray-600">Urgency</h3>
+                    </div>
+                </div>
+            `;
+            
+            const createList = (title, items, color = 'cyan') => {
+                if (!items || items.length === 0) return '';
+                return `
+                    <div class="bg-white rounded-2xl p-6 shadow-md">
+                        <h4 class="font-bold text-lg mb-4 text-${color}-600">${title}</h4>
+                        <div class="space-y-3">
+                            ${items.map(item => `
+                                <div class="bg-gray-50 rounded-lg p-4 border-l-4 border-${color}-400">
+                                    ${typeof item === 'object' 
+                                        ? `<div class="font-semibold text-gray-900 mb-1">${item.name}</div>
+                                           <div class="text-sm text-gray-600">${item.purpose}</div>`
+                                        : `<div class="text-gray-700">${item}</div>`
+                                    }
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            };
+
+            html += createList('Recommendations', report.recommendations, 'green');
+            html += createList('Suggested Medications', report.suggested_medications, 'purple');
+
+            reportContent.innerHTML = html;
+        }
+    };
+
+    // --- Event Listeners ---
+    startBtn.addEventListener('click', startQuestionnaire);
+    restartBtn.addEventListener('click', () => location.reload());
+    evaluateBtn.addEventListener('click', () => showReport());
+    backBtn.addEventListener('click', () => showSection('start-section'));
+    homeBtn.addEventListener('click', () => showSection('start-section'));
+    backQuestionBtn.addEventListener('click', () => submitAnswer('', 'previous'));
+    skipQuestionBtn.addEventListener('click', () => submitAnswer('Skipped', 'skip'));
+
+</script>
+
+</body>
+</html>
