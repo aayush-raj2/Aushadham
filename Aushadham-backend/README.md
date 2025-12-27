@@ -5,7 +5,7 @@ Medical Questionnaire Backend implemented in Java Spring Boot.
 ## Prerequisites
 
 - Java 17 or higher
-- Maven 3.6+
+- Maven 3.6+ 
 
 ## Building the Project
 
