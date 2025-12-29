@@ -10,7 +10,7 @@ app.secret_key = secrets.token_hex(16)
 CORS(app, supports_credentials=True)
 
 # Comprehensive medical questionnaire knowledge base
-questionnaire_templates = {
+questionnaire_templates = { 
     'stomach': {
         'initial_questions': [
             {
